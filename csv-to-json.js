@@ -27,15 +27,19 @@ function convertDataToJSON(sheetName, startRow, startColumn, numRows, numColumns
     jsonObject["Email"] = row[1] || ""; // Assume the second column is Email
     jsonObject["Identity"] = row[2] || ""; // Assume the third column is Identity
     
-    // Filter data based on email and/or identity if provided
-    if ((!email || jsonObject["Email"] === email) && (!identity || jsonObject["Identity"] === identity)) {
-      jsonArray.push(jsonObject);
+    // Filter out rows with empty values for CouponCode, Email, or Identity
+    if (jsonObject["CouponCode"] !== "" || jsonObject["Email"] !== "" || jsonObject["Identity"] !== "") {
+      // Filter data based on email and/or identity if provided
+      if ((!email || jsonObject["Email"] === email) && (!identity || jsonObject["Identity"] === identity)) {
+        jsonArray.push(jsonObject);
+      }
     }
   }
   
   // Return JSON array
   return jsonArray;
 }
+
 
 // Web service endpoint to access the converted data
 function doGet(e) {
